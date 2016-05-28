@@ -1,4 +1,5 @@
 *.o
 *.so
 *.class
+*.log
 jwiringx.h
