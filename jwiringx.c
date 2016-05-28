@@ -141,6 +141,10 @@ void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
 
 // GPIO
 
+jint Java_wiringX_ValidGPIO(JNIEnv *env, jclass c, jint pin) {
+    return (jint)wiringXValidGPIO((int)pin);
+}
+
 jint Java_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
     // look-up PinMode class
     jclass class = (*env)->FindClass(env, "PinMode");

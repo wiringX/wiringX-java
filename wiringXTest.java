@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 public class wiringXTest {
     // collect log
     StringBuilder sb = null;
-
+    
     @Before
     public void Setup() {
         // create new log buffer
@@ -51,6 +51,8 @@ public class wiringXTest {
         System.err.print(sb.toString());
         sb = null;
     }
+
+    // Utility
 
     @Test
     public void delayMicroseconds_ValidArg() {
@@ -74,6 +76,13 @@ public class wiringXTest {
     public void delayMicroseconds_InvalidArg_OutOfRange() {
         // out of range
         wiringX.delayMicroseconds(Long.MAX_VALUE);
+    }
+
+    // GPIO
+
+    @Test
+    public void ValidGPIO() {
+        wiringX.ValidGPIO(0);
     }
 
     @Test
