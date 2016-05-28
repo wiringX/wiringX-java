@@ -116,6 +116,22 @@ void Java_wiringX_GC(JNIEnv *env, jclass c) {
 
 // Utility
 
+jstring Java_wiringX_Platform(JNIEnv *env, jclass c) {
+    // call original function
+    const char *platformnamec = wiringXPlatform();
+
+    // create new string object
+    jstring platformname = (*env)->NewStringUTF(env, platformnamec);
+    if(platformname == NULL) {
+        // not good, allocating string failed
+        // exception already thrown, return to java
+        return NULL;
+    }
+
+    // all good, return string
+    return platformname;
+}
+
 void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     // check arguments for valid value-range (unsigned int)
     if(delay < 0 || delay > UINT_MAX) {

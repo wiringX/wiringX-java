@@ -55,6 +55,12 @@ public class wiringXTest {
     // Utility
 
     @Test
+    public void Platform() {
+        String platform = wiringX.Platform();
+        assertEquals("pcduino1", platform);
+    }
+    
+    @Test
     public void delayMicroseconds_ValidArg() {
         // check if delay is at least whats specified
         long interval = 1*1000*1000;
