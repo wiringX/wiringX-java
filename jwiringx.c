@@ -181,3 +181,49 @@ jint Java_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger)
 void Java_wiringX_GC(JNIEnv *env, jclass c) {
     wiringXGC();
 }
+
+jint Java_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
+    // look-up DigitalValue class
+    jclass class = (*env)->FindClass(env, "DigitalValue");
+    if(class == NULL) {
+        // exception was thrown, return to java
+        return 0;
+    }
+
+    // check type
+    if(!(*env)->IsInstanceOf(env, value, class)) {
+        // type mismatch, throw exception
+        throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of DigitalValue");\
+        return 0;
+    }
+
+    // get ordinal method
+    jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
+    if(mid == NULL) {
+        // methodnotfound
+        // exception already thrown
+        return 0;
+    }
+
+    // get ordinal value
+    jint ordinal = (*env)->CallIntMethod(env, value, mid);
+    if((*env)->ExceptionCheck(env)) {
+        // an exception occured
+        return 0;
+    }
+
+    // convert to C enum
+    // Java Ordinals start from 0 and go to N in order of declaration
+    enum digital_value_t valuec;
+    switch(ordinal) {
+        case 0: valuec = LOW; break;
+        case 1: valuec = HIGH; break;
+        default:
+            // not good, throw an exception
+            throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "");
+            return 0;
+    }
+
+    // call original function
+    return (jint)digitalWrite((int)pin, valuec);
+}

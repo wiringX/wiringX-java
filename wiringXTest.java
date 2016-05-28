@@ -48,7 +48,7 @@ public class wiringXTest {
         wiringX.GC();
 
         // flush log buffer
-        System.out.print(sb.toString());
+        System.err.print(sb.toString());
         sb = null;
     }
 
@@ -83,5 +83,11 @@ public class wiringXTest {
         wiringX.pinMode(0, PinMode.INPUT);
         wiringX.pinMode(0, PinMode.OUTPUT);
         wiringX.pinMode(0, PinMode.INTERRUPT);
+    }
+
+    @Test
+    public void digitalWrite() {
+        wiringX.digitalWrite(0, DigitalValue.LOW);
+        wiringX.digitalWrite(0, DigitalValue.HIGH);
     }
 }
