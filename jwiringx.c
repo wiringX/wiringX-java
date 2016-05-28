@@ -37,7 +37,7 @@
 // variadics
 #include <stdarg.h>
 
-// Utility functions
+// Helper functions
 
 jobject create(JNIEnv *env, const char *classpath) {
     jobject result;
@@ -74,7 +74,47 @@ void throw_new_exception(JNIEnv *env, const char *classname, const char *message
     (*env)->ThrowNew(env, class, message);
 }
 
-// JNI implementation
+// Init
+
+jint Java_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
+    // create UTF-8 encoded C-string from given platform string
+    const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
+    if(platformc == NULL) {
+        // allocating a C-String failed!
+        // at this point an exception should have already been thrown.
+        // The return value is now irrelevant.
+        return 0;
+    }
+
+    // register logger, if any
+    void *handler = NULL;
+    if(logger != NULL) {
+        int r = registerLogConsumer(env, logger);
+        if(r != 0) {
+            // unexpected failure
+            // exceptions have already been thrown
+            return -1;
+        }
+
+        // looks good
+        handler = &logconsumerhandler;
+    }
+
+    // call original function
+    int r = wiringXSetup((char *)platformc, handler);
+
+    // free resources
+    (*env)->ReleaseStringUTFChars(env, platform, platformc);
+    
+    // return result
+    return r;
+}
+
+void Java_wiringX_GC(JNIEnv *env, jclass c) {
+    wiringXGC();
+}
+
+// Utility
 
 void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     // check arguments for valid value-range (unsigned int)
@@ -98,6 +138,8 @@ void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     // call original function
     delayMicroseconds((int)delay);
 }
+
+// GPIO
 
 jint Java_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
     // look-up PinMode class
@@ -145,44 +187,6 @@ jint Java_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
 
     // call original function
     return (jint)pinMode((int)pin, modec);
-}
-
-jint Java_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
-    // create UTF-8 encoded C-string from given platform string
-    const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
-    if(platformc == NULL) {
-        // allocating a C-String failed!
-        // at this point an exception should have already been thrown.
-        // The return value is now irrelevant.
-        return 0;
-    }
-
-    // register logger, if any
-    void *handler = NULL;
-    if(logger != NULL) {
-        int r = registerLogConsumer(env, logger);
-        if(r != 0) {
-            // unexpected failure
-            // exceptions have already been thrown
-            return -1;
-        }
-
-        // looks good
-        handler = &logconsumerhandler;
-    }
-
-    // call original function
-    int r = wiringXSetup((char *)platformc, handler);
-
-    // free resources
-    (*env)->ReleaseStringUTFChars(env, platform, platformc);
-    
-    // return result
-    return r;
-}
-
-void Java_wiringX_GC(JNIEnv *env, jclass c) {
-    wiringXGC();
 }
 
 jint Java_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
@@ -287,3 +291,9 @@ jint Java_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mode) {
     // call original function
     return (jint)wiringXISR((int)pin, modec);
 }
+
+// I2C
+
+// SPI
+
+// SERIAL

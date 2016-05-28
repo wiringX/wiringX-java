@@ -25,18 +25,25 @@
 import java.util.function.BiConsumer;
 
 public class wiringX {
-    public static native void delayMicroseconds(long delay);
-    public static native int pinMode(int pin, PinMode mode);
-
+    // Init
     // TODO: use vararg and primitive type
     public static native int Setup(String platform, LogConsumer logger);
     public static native void GC();
 
+    // Utility
+    public static native String Platform();
+    public static native void delayMicroseconds(long delay);
+    public static native int SelectableFd(int fd);
+
+    // GPIO
+    public static native int ValidGPIO(int pin);
+    public static native int pinMode(int pin, PinMode mode);
     public static native int digitalWrite(int pin, DigitalValue value);
     public static native int digitalRead(int pin);
     public static native int waitForInterrupt(int pin, int timeout);
     public static native int ISR(int pin, ISRMode mode);
 
+    // I2C
     public static native int I2CRead(int fd);
     public static native int I2CReadReg8(int fd, int reg);
     public static native int I2CReadReg16(int fd, int reg);
@@ -45,10 +52,12 @@ public class wiringX {
     public static native int I2CWriteReg16(int fd, int reg, int data);
     public static native int I2CSetup(String path, int deviceID);
 
+    // SPI
     public static native int SPIGetFd(int channel);
     public static native int SPIDataRW(int channel, byte[] data);
     public static native int SPISetup(int channel, int speed);
 
+    // Serial
     public static native int wiringXSerialOpen(String device, SerialConfig configuration);
     public static native void wiringXSerialFlush(int fd);
     public static native void wiringXSerialClose(int fd);
@@ -57,10 +66,6 @@ public class wiringX {
     public static native void wiringXSerialPrintf(int fd, String format, Object... args);
     public static native int wiringXSerialDataAvail(int fd);
     public static native int wiringXSerialGetChar(int fd);
-
-    public static native String Platform();
-    public static native int ValidGPIO(int pin);
-    public static native int SelectableFd(int fd);
 
     // load native library when class gets loaded
     static {
