@@ -90,4 +90,9 @@ public class wiringXTest {
         wiringX.digitalWrite(0, DigitalValue.LOW);
         wiringX.digitalWrite(0, DigitalValue.HIGH);
     }
+
+    @Test
+    public void digitalRead() {
+        wiringX.digitalRead(0);
+    }
 }

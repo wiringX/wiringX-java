@@ -227,3 +227,7 @@ jint Java_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
     // call original function
     return (jint)digitalWrite((int)pin, valuec);
 }
+
+jint Java_wiringX_digitalRead(JNIEnv *env, jclass c, jint pin) {
+    return (jint)digitalRead((int)pin);
+}
