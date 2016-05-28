@@ -37,7 +37,8 @@
 // variadics
 #include <stdarg.h>
 
-// helper functions
+// Utility functions
+
 jobject create(JNIEnv *env, const char *classpath) {
     jobject result;
 
@@ -72,6 +73,8 @@ void throw_new_exception(JNIEnv *env, const char *classname, const char *message
     // throw it
     (*env)->ThrowNew(env, class, message);
 }
+
+// JNI implementation
 
 void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     // check arguments for valid value-range (unsigned int)
@@ -234,4 +237,53 @@ jint Java_wiringX_digitalRead(JNIEnv *env, jclass c, jint pin) {
 
 jint Java_wiringX_waitForInterrupt(JNIEnv *env, jclass c, jint pin, jint timeout) {
     return (jint)waitForInterrupt((int)pin, (int)timeout);
+}
+
+jint Java_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mode) {
+    // look-up DigitalValue class
+    jclass class = (*env)->FindClass(env, "ISRMode");
+    if(class == NULL) {
+        // exception was thrown, return to java
+        return 0;
+    }
+
+    // check type
+    if(!(*env)->IsInstanceOf(env, mode, class)) {
+        // type mismatch, throw exception
+        throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of ISRMode");\
+        return 0;
+    }
+
+    // get ordinal method
+    jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
+    if(mid == NULL) {
+        // methodnotfound
+        // exception already thrown
+        return 0;
+    }
+
+    // get ordinal value
+    jint ordinal = (*env)->CallIntMethod(env, mode, mid);
+    if((*env)->ExceptionCheck(env)) {
+        // an exception occured
+        return 0;
+    }
+
+    // convert to C enum
+    // Java Ordinals start from 0 and go to N in order of declaration
+    enum isr_mode_t modec;
+    switch(ordinal) {
+        case 0: modec = ISR_MODE_UNKNOWN; break;
+        case 1: modec = ISR_MODE_RISING; break;
+        case 2: modec = ISR_MODE_FALLING; break;
+        case 3: modec = ISR_MODE_BOTH; break;
+        case 4: modec = ISR_MODE_NONE; break;
+        default:
+            // not good, throw an exception
+            throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "");
+            return 0;
+    }
+
+    // call original function
+    return (jint)wiringXISR((int)pin, modec);
 }

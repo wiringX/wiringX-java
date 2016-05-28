@@ -101,4 +101,13 @@ public class wiringXTest {
         // timeout = 1s
         wiringX.waitForInterrupt(0, 1*1000);
     }
+
+    @Test
+    public void ISR() {
+        wiringX.ISR(0, ISRMode.UNKNOWN);
+        wiringX.ISR(0, ISRMode.RISING);
+        wiringX.ISR(0, ISRMode.FALLING);
+        wiringX.ISR(0, ISRMode.BOTH);
+        wiringX.ISR(0, ISRMode.NONE);
+    }
 }
