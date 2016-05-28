@@ -128,6 +128,10 @@ void logconsumerhandler(int prio, const char * format, ...) {
 
     // call registered java function
     (*l.env)->CallVoidMethod(l.env, l.obj, l.mid, (jint)prio, message);
+    if((*l.env)->ExceptionCheck(l.env)) {
+        // an exception occured
+        return;
+    }
 
     // done
     return;
