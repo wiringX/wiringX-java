@@ -23,17 +23,38 @@
  */
 
 import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 
 public class wiringXTest {
-    public static void main(String[] args) {
-        wiringX.delayMicroseconds(50000);
+    // collect log
+    StringBuilder sb = null;
+
+    @Before
+    public void Setup() {
+        // create new log buffer
+        sb = new StringBuilder();
+
+        // setup wiringX for every test
+        wiringX.Setup("pcduino1", (int prio, String message) -> sb.append("wiringX: PRIO " + prio + ": " + message + "\n"));
+    }
+
+    @After
+    public void GC() {
+        // clean up after every test
+        wiringX.GC();
+
+        // flush log buffer
+        System.out.print(sb.toString());
+        sb = null;
     }
 
     @Test
     public void delayMicroseconds_ValidArg() {
+        // check if delay is at least whats specified
         long interval = 1*1000*1000;
 
         long before = System.nanoTime();
@@ -56,16 +77,11 @@ public class wiringXTest {
     }
 
     @Test
-    public void Setup() {
-        int r;
-        LogConsumer logger = (int prio, String message) -> {};
-
-        // invalid platform
-        r = wiringX.Setup("", logger);
-        assertNotEquals(0, r);
-
-        // valid platform
-        r = wiringX.Setup("pcduino1", logger);
-        assertEquals(0, r);
+    public void pinMode() {
+        // ensure all possible values are accepted
+        wiringX.pinMode(0, PinMode.NOT_SET);
+        wiringX.pinMode(0, PinMode.INPUT);
+        wiringX.pinMode(0, PinMode.OUTPUT);
+        wiringX.pinMode(0, PinMode.INTERRUPT);
     }
 }

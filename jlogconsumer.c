@@ -69,8 +69,6 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
         return -1;
     }
 
-    // TODO: lock environment?????
-
     // store handles
     l.env = env;
     l.obj = (*env)->NewGlobalRef(env, obj);
@@ -96,19 +94,21 @@ void deregisterLogConsumer() {
 }
 
 void logconsumerhandler(int prio, const char * format, ...) {
-    // init vararg list
     va_list args;
-    va_start (args, format);
 
     // calculate out string length
+    va_start (args, format);
     int length = vsnprintf(NULL, 0, format, args);
+    va_end(args);
 
     // allocate c-string
     char *messagec = (char *)malloc(length+1);
     // TODO: check if allocation worked
 
     // build actual message string
-    vsnprintf(messagec, length+1, format, args);
+    va_start (args, format);
+    vsprintf(messagec, format, args);
+    va_end(args);
 
     // free vararg list
     va_end(args);
