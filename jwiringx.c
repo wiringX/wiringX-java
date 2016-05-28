@@ -155,6 +155,10 @@ void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     delayMicroseconds((int)delay);
 }
 
+jint Java_wiringX_SelectableFd(JNIEnv *env, jclass c, jint pin) {
+    return (jint)wiringXSelectableFd((int)pin);
+}
+
 // GPIO
 
 jint Java_wiringX_ValidGPIO(JNIEnv *env, jclass c, jint pin) {

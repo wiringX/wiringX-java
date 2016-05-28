@@ -84,6 +84,11 @@ public class wiringXTest {
         wiringX.delayMicroseconds(Long.MAX_VALUE);
     }
 
+    @Test
+    public void SelectableFd() {
+        wiringX.SelectableFd(0);
+    }
+
     // GPIO
 
     @Test
