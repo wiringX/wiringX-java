@@ -111,7 +111,11 @@ jint Java_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger)
 }
 
 void Java_wiringX_GC(JNIEnv *env, jclass c) {
+    // call original function
     wiringXGC();
+
+    // free handle on logger
+    deregisterLogConsumer();
 }
 
 // Utility
