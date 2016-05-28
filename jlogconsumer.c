@@ -33,8 +33,9 @@ struct logger {
 } l = {0};
 
 int registerLogConsumer(JNIEnv *env, jobject obj) {
-    // TODO: null-check
-    
+    // if already registered, clean up first
+    deregisterLogConsumer();
+
     // look up expected class
     jclass class = (*env)->FindClass(env, "LogConsumer");
     if(class == NULL) {
@@ -80,9 +81,13 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
 }
 
 void deregisterLogConsumer() {
+    // is there anzthing to free?
+    if(l.env == NULL)
+        // apparently not
+        return;
+
     // free references
     (*l.env)->DeleteGlobalRef(l.env, l.obj);
-    // TODO: env
 
     // set 0
     l.env = NULL;
