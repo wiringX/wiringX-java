@@ -95,4 +95,10 @@ public class wiringXTest {
     public void digitalRead() {
         wiringX.digitalRead(0);
     }
+
+    @Test
+    public void waitForInterrupt() {
+        // timeout = 1s
+        wiringX.waitForInterrupt(0, 1*1000);
+    }
 }

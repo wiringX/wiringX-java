@@ -231,3 +231,7 @@ jint Java_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
 jint Java_wiringX_digitalRead(JNIEnv *env, jclass c, jint pin) {
     return (jint)digitalRead((int)pin);
 }
+
+jint Java_wiringX_waitForInterrupt(JNIEnv *env, jclass c, jint pin, jint timeout) {
+    return (jint)waitForInterrupt((int)pin, (int)timeout);
+}
