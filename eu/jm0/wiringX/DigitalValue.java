@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-public enum PinMode {
-    NOT_SET,
-    INPUT,
-    OUTPUT,
-    INTERRUPT,
+package eu.jm0.wiringX;
+
+public enum DigitalValue {
+    LOW,
+    HIGH,
 }

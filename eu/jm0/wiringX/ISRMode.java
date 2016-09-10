@@ -22,7 +22,12 @@
  * SOFTWARE.
  */
 
-public enum DigitalValue {
-    LOW,
-    HIGH,
+package eu.jm0.wiringX;
+
+public enum ISRMode {
+    UNKNOWN,
+    RISING,
+    FALLING,
+    BOTH,
+    NONE,
 }

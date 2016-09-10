@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package eu.jm0.wiringX;
+
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;

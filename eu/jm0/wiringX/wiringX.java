@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package eu.jm0.wiringX;
+
 import java.util.function.BiConsumer;
 
 public class wiringX {

@@ -23,7 +23,7 @@
  */
 
 // generated JNI declerations
-#include "jwiringx.h"
+#include "eu_jm0_wiringX_wiringX.h"
 
 // utlity functions
 #include "jni-util.h"
@@ -31,13 +31,13 @@
 // the real wiringX
 #include <wiringX.h>
 
-jint Java_wiringX_ValidGPIO(JNIEnv *env, jclass c, jint pin) {
+jint Java_eu_jm0_wiringX_wiringX_ValidGPIO(JNIEnv *env, jclass c, jint pin) {
     return (jint)wiringXValidGPIO((int)pin);
 }
 
-jint Java_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
+jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
     // look-up PinMode class
-    jclass class = (*env)->FindClass(env, "PinMode");
+    jclass class = (*env)->FindClass(env, "eu/jm0/wiringX/PinMode");
     if(class == NULL) {
         // exception was thrown, return to java
         return 0;
@@ -83,9 +83,9 @@ jint Java_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
     return (jint)pinMode((int)pin, modec);
 }
 
-jint Java_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
+jint Java_eu_jm0_wiringX_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
     // look-up DigitalValue class
-    jclass class = (*env)->FindClass(env, "DigitalValue");
+    jclass class = (*env)->FindClass(env, "eu/jm0/wiringX/DigitalValue");
     if(class == NULL) {
         // exception was thrown, return to java
         return 0;
@@ -129,17 +129,17 @@ jint Java_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
     return (jint)digitalWrite((int)pin, valuec);
 }
 
-jint Java_wiringX_digitalRead(JNIEnv *env, jclass c, jint pin) {
+jint Java_eu_jm0_wiringX_wiringX_digitalRead(JNIEnv *env, jclass c, jint pin) {
     return (jint)digitalRead((int)pin);
 }
 
-jint Java_wiringX_waitForInterrupt(JNIEnv *env, jclass c, jint pin, jint timeout) {
+jint Java_eu_jm0_wiringX_wiringX_waitForInterrupt(JNIEnv *env, jclass c, jint pin, jint timeout) {
     return (jint)waitForInterrupt((int)pin, (int)timeout);
 }
 
-jint Java_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mode) {
+jint Java_eu_jm0_wiringX_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mode) {
     // look-up DigitalValue class
-    jclass class = (*env)->FindClass(env, "ISRMode");
+    jclass class = (*env)->FindClass(env, "eu/jm0/wiringX/ISRMode");
     if(class == NULL) {
         // exception was thrown, return to java
         return 0;

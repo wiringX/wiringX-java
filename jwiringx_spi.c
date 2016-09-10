@@ -23,7 +23,7 @@
  */
 
 // generated JNI declerations
-#include "jwiringx.h"
+#include "eu_jm0_wiringX_wiringX.h"
 
 // the real wiringX
 #include <wiringX.h>

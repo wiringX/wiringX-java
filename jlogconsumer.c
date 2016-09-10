@@ -38,7 +38,7 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
     deregisterLogConsumer();
 
     // look up expected class
-    jclass class = (*env)->FindClass(env, "LogConsumer");
+    jclass class = (*env)->FindClass(env, "eu/jm0/wiringX/LogConsumer");
     if(class == NULL) {
         // classnotfound
         // exception should have been thrown

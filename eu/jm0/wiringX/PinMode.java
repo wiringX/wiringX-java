@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-public class SerialConfig {
-    public int baud;
-    public int databits;
-    public int parity;
-    public int stopbits;
-    public int flowcontrol;
+package eu.jm0.wiringX;
+
+public enum PinMode {
+    NOT_SET,
+    INPUT,
+    OUTPUT,
+    INTERRUPT,
 }

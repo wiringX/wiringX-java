@@ -9,8 +9,8 @@ JAVACP=.:/usr/share/java/junit.jar
 # generic targets
 all: libwiringX_java.so
 
-test: all wiringXTest.class
-	LD_LIBRARY_PATH=. java -cp $(JAVACP) org.junit.runner.JUnitCore wiringXTest
+test: all eu/jm0/wiringX/wiringXTest.class
+	LD_LIBRARY_PATH=. java -cp $(JAVACP) org.junit.runner.JUnitCore eu.jm0.wiringX.wiringXTest
 
 clean:
 	rm -fv *.so *.o *.class jwiringx.h
@@ -23,8 +23,8 @@ clean:
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 # specific target rules
-jwiringx.h: wiringX.class
-	javah -o jwiringx.h wiringX
+jwiringx.h: eu/jm0/wiringX/wiringX.class
+	javah -o jwiringx.h eu.jm0.wiringX.wiringX
 
 libwiringX_java.so: $(OBJECTS)
 	$(CC) -shared -shared $(LDFLAGS) -o $@ $^

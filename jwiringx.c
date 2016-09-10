@@ -23,7 +23,7 @@
  */
 
 // generated JNI declerations
-#include "jwiringx.h"
+#include "eu_jm0_wiringX_wiringX.h"
 
 // logconsumer implementation
 #include "jlogconsumer.h"
@@ -37,7 +37,7 @@
 // variadics
 #include <stdarg.h>
 
-jint Java_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
+jint Java_eu_jm0_wiringX_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
     // create UTF-8 encoded C-string from given platform string
     const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
     if(platformc == NULL) {
@@ -71,7 +71,7 @@ jint Java_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger)
     return r;
 }
 
-void Java_wiringX_GC(JNIEnv *env, jclass c) {
+void Java_eu_jm0_wiringX_wiringX_GC(JNIEnv *env, jclass c) {
     // call original function
     wiringXGC();
 
@@ -81,7 +81,7 @@ void Java_wiringX_GC(JNIEnv *env, jclass c) {
 
 // Utility
 
-jstring Java_wiringX_Platform(JNIEnv *env, jclass c) {
+jstring Java_eu_jm0_wiringX_wiringX_Platform(JNIEnv *env, jclass c) {
     // call original function
     const char *platformnamec = wiringXPlatform();
 
@@ -97,7 +97,7 @@ jstring Java_wiringX_Platform(JNIEnv *env, jclass c) {
     return platformname;
 }
 
-void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
+void Java_eu_jm0_wiringX_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     // check arguments for valid value-range (unsigned int)
     if(delay < 0 || delay > UINT_MAX) {
         // lookup exception class
@@ -120,7 +120,7 @@ void Java_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     delayMicroseconds((int)delay);
 }
 
-jint Java_wiringX_SelectableFd(JNIEnv *env, jclass c, jint pin) {
+jint Java_eu_jm0_wiringX_wiringX_SelectableFd(JNIEnv *env, jclass c, jint pin) {
     return (jint)wiringXSelectableFd((int)pin);
 }
 
