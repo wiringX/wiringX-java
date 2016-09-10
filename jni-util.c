@@ -22,6 +22,42 @@
  * SOFTWARE.
  */
 
-int registerLogConsumer(JNIEnv *env, jobject obj);
-void deregisterLogConsumer();
-void logconsumerhandler(int prio, const char * format, ...);
+#include <jni.h>
+
+#include "jni-util.h"
+
+jobject create(JNIEnv *env, const char *classpath) {
+    jobject result;
+
+    // look-up class
+    jclass class = (*env)->FindClass(env, classpath);
+    if(class == NULL)
+        return NULL;
+
+    // look-up constructor
+    jmethodID cid = (*env)->GetMethodID(env, class, "<init>", "()V");
+    if(cid == NULL)
+        return NULL;
+
+    // create object
+    result = (*env)->NewObject(env, class, cid);
+
+    // free local resources
+    (*env)->DeleteLocalRef(env, class);
+
+    // done
+    return result;
+}
+
+void throw_new_exception(JNIEnv *env, const char *classname, const char *message) {
+    jclass class = (*env)->FindClass(env, classname);
+    if(class == NULL) {
+        // classnotfound
+        // exception already thrown
+        return;
+    }
+
+    // throw it
+    (*env)->ThrowNew(env, class, message);
+}
+

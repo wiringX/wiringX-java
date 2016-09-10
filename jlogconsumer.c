@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-#include "jlogconsumer.h"
-
+#include <jni.h>
 #include <stdlib.h>
+
+#include "jlogconsumer.h"
 
 struct logger {
     JNIEnv *env;

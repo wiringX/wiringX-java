@@ -22,6 +22,12 @@
  * SOFTWARE.
  */
 
-int registerLogConsumer(JNIEnv *env, jobject obj);
-void deregisterLogConsumer();
-void logconsumerhandler(int prio, const char * format, ...);
+// generated JNI declerations
+#include "jwiringx.h"
+
+// the real wiringX
+#include <wiringX.h>
+
+// limits for converting numeric types
+#include <limits.h>
+

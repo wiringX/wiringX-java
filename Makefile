@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-fPIC -g -I/usr/lib64/jvm/java/include -I/usr/lib64/jvm/java/include/linux
 LDFLAGS=-lwiringX
-OBJECTS=jwiringx.o jlogconsumer.o gdbserver.o
+OBJECTS=gdbserver.o jlogconsumer.o jni-util.o jwiringx.o jwiringx_gpio.o jwiringx_i2c.o jwiringx_serial.o jwiringx_spi.o
 
 JAVAC=javac
 JAVACP=.:/usr/share/java/junit.jar

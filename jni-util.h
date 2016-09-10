@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
-int registerLogConsumer(JNIEnv *env, jobject obj);
-void deregisterLogConsumer();
-void logconsumerhandler(int prio, const char * format, ...);
+jobject create(JNIEnv *env, const char *classpath);
+
+void throw_new_exception(JNIEnv *env, const char *classname, const char *message);
+
