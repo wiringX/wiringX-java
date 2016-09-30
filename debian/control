@@ -1,0 +1,35 @@
+Source: wiringx-java
+Priority: optional
+Maintainer: Josua Mayer <josua.mayer97@gmail.com>
+Build-Depends:
+ debhelper (>= 9),
+ dh-exec (>=0.3),
+ cmake,
+ java7-runtime,
+ java7-sdk,
+ junit4,
+ libwiringx-dev
+Standards-Version: 3.9.5
+Section: java
+Homepage: https://github.com/Artox/wiringX-java
+Vcs-Git: https://github.com/Artox/wiringX-java
+Vcs-Browser: https://github.com/Artox/wiringX-java
+
+Package: libwiringx-java
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Bindings for jwiringx to wiringX
+ This package provides bindings for the jwiring Java API, 
+ to the native wiringX gpio library.
+
+Package: jwiringx
+Section: java
+Architecture: all
+Multi-Arch: foreign
+Depends: libwiringx-java (= ${binary:Version}), ${misc:Depends}
+Description: Java API to wiringX
+ This package provides a Java interface to all functions of the
+ wiringX gpio library.
