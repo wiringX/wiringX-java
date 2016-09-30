@@ -24,7 +24,6 @@
 
 package eu.jm0.wiringX;
 
-@FunctionalInterface
 public interface LogConsumer {
     void accept(int prio, String message);
     // TODO: implement variad based approach

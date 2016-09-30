@@ -41,7 +41,12 @@ public class wiringXTest {
         sb = new StringBuilder();
 
         // setup wiringX for every test
-        wiringX.Setup("pcduino1", (int prio, String message) -> sb.append("wiringX: PRIO " + prio + ": " + message + "\n"));
+        wiringX.Setup("pcduino1", new LogConsumer() {
+			@Override
+			public void accept(int prio, String message) {
+				sb.append("wiringX: PRIO " + prio + ": " + message + "\n");
+			}
+		});
     }
 
     @After

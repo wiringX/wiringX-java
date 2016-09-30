@@ -24,8 +24,6 @@
 
 package eu.jm0.wiringX;
 
-import java.util.function.BiConsumer;
-
 public class wiringX {
     // Init
     // TODO: use vararg and primitive type
