@@ -49,15 +49,30 @@ jobject create(JNIEnv *env, const char *classpath) {
     return result;
 }
 
-void throw_new_exception(JNIEnv *env, const char *classname, const char *message) {
-    jclass class = (*env)->FindClass(env, classname);
-    if(class == NULL) {
-        // classnotfound
-        // exception already thrown
-        return;
+void throw_new_exception(JNIEnv *env, const char *classname, const char *message, jclass *cachevar) {
+    // lookup class from cache variable, if any
+    jclass class = NULL;
+    if(cachevar && *cachevar)
+        class = *cachevar;
+    else {
+        class = (*env)->FindClass(env, classname);
+
+        if(class == NULL) {
+            // classnotfound
+            // exception already thrown
+            return;
+        }
     }
 
     // throw it
     (*env)->ThrowNew(env, class, message);
+
+    // store class in cache variable, if any
+    if(cachevar)
+        *cachevar = class;
 }
 
+// class cache variables
+jclass classcache_classcastexception = NULL;
+jclass classcache_enumconstantnotpresentexception = NULL;
+jclass classcache_llegalargumentexception = NULL;

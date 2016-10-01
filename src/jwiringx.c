@@ -37,6 +37,9 @@
 // variadics
 #include <stdarg.h>
 
+// utlity functions
+#include "jni-util.h"
+
 jint Java_eu_jm0_wiringX_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
     // create UTF-8 encoded C-string from given platform string
     const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
@@ -100,19 +103,10 @@ jstring Java_eu_jm0_wiringX_wiringX_Platform(JNIEnv *env, jclass c) {
 void Java_eu_jm0_wiringX_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
     // check arguments for valid value-range (unsigned int)
     if(delay < 0 || delay > UINT_MAX) {
-        // lookup exception class
-        jclass illegalargumentexceptionclass = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-        if(illegalargumentexceptionclass == NULL)
-            return;
+    	// throw exception
+    	throw_new_exception(env, "java/lang/IllegalArgumentException", "Value out of Range", &classcache_illegalargumentexception);
 
-        // throw it
-        (*env)->ThrowNew(env, illegalargumentexceptionclass, "Value out of Range");
-        // TODO: check return-value
-
-        // free exception class reference
-        (*env)->DeleteLocalRef(env, illegalargumentexceptionclass);
-        
-        // return to java
+    	// return to java
         return;
     }
 

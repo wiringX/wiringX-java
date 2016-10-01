@@ -24,5 +24,9 @@
 
 jobject create(JNIEnv *env, const char *classpath);
 
-void throw_new_exception(JNIEnv *env, const char *classname, const char *message);
+void throw_new_exception(JNIEnv *env, const char *classname, const char *message, jclass *cachevar);
 
+// class cache variables
+extern jclass classcache_classcastexception;
+extern jclass classcache_enumconstantnotpresentexception;
+extern jclass classcache_illegalargumentexception;

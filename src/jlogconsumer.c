@@ -27,6 +27,9 @@
 
 #include "jlogconsumer.h"
 
+// utlity functions
+#include "jni-util.h"
+
 struct logger {
     JNIEnv *env;
     jobject obj;
@@ -38,25 +41,20 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
     deregisterLogConsumer();
 
     // look up expected class
-    jclass class = (*env)->FindClass(env, "eu/jm0/wiringX/LogConsumer");
-    if(class == NULL) {
-        // classnotfound
-        // exception should have been thrown
-        return -1;
+    static jclass class = NULL;
+    if(!class) {
+    	class = (*env)->FindClass(env, "eu/jm0/wiringX/LogConsumer");
+    	if(class == NULL) {
+    		// classnotfound
+    		// exception should have been thrown
+    		return -1;
+    	}
     }
 
     // check actual object type
     if(!(*env)->IsInstanceOf(env, obj, class)) {
-        // look-up java.lang.ClassCastException
-        jclass eclass = (*env)->FindClass(env, "/java/lang/ClassCastException");
-        if(eclass == NULL) {
-            // classnotfound
-            // exception should have been thrown
-            return -1;
-        }
-
-        // throw it
-        (*env)->ThrowNew(env, eclass, "is not a subtype of LogConsumer");
+        // throw exception
+    	throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of LogConsumer", &classcache_classcastexception);
 
         // return with failure
         return -1;
