@@ -25,7 +25,7 @@
 package eu.jm0.wiringX;
 
 public interface LogConsumer {
-    void accept(int prio, String message);
-    // TODO: implement variad based approach
-    //void accept(int prio, String format, Object... args);
+	void accept(int prio, String message);
+	// TODO: implement variad based approach
+	//void accept(int prio, String format, Object... args);
 }

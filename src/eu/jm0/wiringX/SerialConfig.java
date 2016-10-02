@@ -25,9 +25,9 @@
 package eu.jm0.wiringX;
 
 public class SerialConfig {
-    public int baud;
-    public int databits;
-    public int parity;
-    public int stopbits;
-    public int flowcontrol;
+	public int baud;
+	public int databits;
+	public int parity;
+	public int stopbits;
+	public int flowcontrol;
 }

@@ -25,6 +25,6 @@
 package eu.jm0.wiringX;
 
 public enum DigitalValue {
-    LOW,
-    HIGH,
+	LOW,
+	HIGH,
 }

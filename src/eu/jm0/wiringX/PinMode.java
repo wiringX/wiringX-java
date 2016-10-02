@@ -25,8 +25,8 @@
 package eu.jm0.wiringX;
 
 public enum PinMode {
-    NOT_SET,
-    INPUT,
-    OUTPUT,
-    INTERRUPT,
+	NOT_SET,
+	INPUT,
+	OUTPUT,
+	INTERRUPT,
 }

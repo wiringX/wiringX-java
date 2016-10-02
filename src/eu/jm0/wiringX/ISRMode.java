@@ -25,9 +25,9 @@
 package eu.jm0.wiringX;
 
 public enum ISRMode {
-    UNKNOWN,
-    RISING,
-    FALLING,
-    BOTH,
-    NONE,
+	UNKNOWN,
+	RISING,
+	FALLING,
+	BOTH,
+	NONE,
 }

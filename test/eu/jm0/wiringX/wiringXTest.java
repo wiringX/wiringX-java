@@ -32,109 +32,109 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 
 public class wiringXTest {
-    // collect log
-    StringBuilder sb = null;
-    
-    @Before
-    public void Setup() {
-        // create new log buffer
-        sb = new StringBuilder();
+	// collect log
+	StringBuilder sb = null;
+	
+	@Before
+	public void Setup() {
+		// create new log buffer
+		sb = new StringBuilder();
 
-        // setup wiringX for every test
-        wiringX.Setup("pcduino1", new LogConsumer() {
+		// setup wiringX for every test
+		wiringX.Setup("pcduino1", new LogConsumer() {
 			@Override
 			public void accept(int prio, String message) {
 				sb.append("wiringX: PRIO " + prio + ": " + message + "\n");
 			}
 		});
-    }
+	}
 
-    @After
-    public void GC() {
-        // clean up after every test
-        wiringX.GC();
+	@After
+	public void GC() {
+		// clean up after every test
+		wiringX.GC();
 
-        // flush log buffer
-        System.err.print(sb.toString());
-        sb = null;
-    }
+		// flush log buffer
+		System.err.print(sb.toString());
+		sb = null;
+	}
 
-    // Utility
+	// Utility
 
-    @Test
-    public void Platform() {
-        String platform = wiringX.Platform();
-        assertEquals("pcduino1", platform);
-    }
-    
-    @Test
-    public void delayMicroseconds_ValidArg() {
-        // check if delay is at least whats specified
-        long interval = 1*1000*1000;
+	@Test
+	public void Platform() {
+		String platform = wiringX.Platform();
+		assertEquals("pcduino1", platform);
+	}
+	
+	@Test
+	public void delayMicroseconds_ValidArg() {
+		// check if delay is at least whats specified
+		long interval = 1*1000*1000;
 
-        long before = System.nanoTime();
-        wiringX.delayMicroseconds(interval);
-        long after = System.nanoTime();
+		long before = System.nanoTime();
+		wiringX.delayMicroseconds(interval);
+		long after = System.nanoTime();
 
-        assertTrue(after - before >= interval);
-    }
+		assertTrue(after - before >= interval);
+	}
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
-    public void delayMicroseconds_InvalidArg_Negative() {
-        // negative
-        wiringX.delayMicroseconds(-1);
-    }
+	@Test(expected = java.lang.IllegalArgumentException.class)
+	public void delayMicroseconds_InvalidArg_Negative() {
+		// negative
+		wiringX.delayMicroseconds(-1);
+	}
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
-    public void delayMicroseconds_InvalidArg_OutOfRange() {
-        // out of range
-        wiringX.delayMicroseconds(Long.MAX_VALUE);
-    }
+	@Test(expected = java.lang.IllegalArgumentException.class)
+	public void delayMicroseconds_InvalidArg_OutOfRange() {
+		// out of range
+		wiringX.delayMicroseconds(Long.MAX_VALUE);
+	}
 
-    @Test
-    public void SelectableFd() {
-        wiringX.SelectableFd(0);
-    }
+	@Test
+	public void SelectableFd() {
+		wiringX.SelectableFd(0);
+	}
 
-    // GPIO
+	// GPIO
 
-    @Test
-    public void ValidGPIO() {
-        wiringX.ValidGPIO(0);
-    }
+	@Test
+	public void ValidGPIO() {
+		wiringX.ValidGPIO(0);
+	}
 
-    @Test
-    public void pinMode() {
-        // ensure all possible values are accepted
-        wiringX.pinMode(0, PinMode.NOT_SET);
-        wiringX.pinMode(0, PinMode.INPUT);
-        wiringX.pinMode(0, PinMode.OUTPUT);
-        wiringX.pinMode(0, PinMode.INTERRUPT);
-    }
+	@Test
+	public void pinMode() {
+		// ensure all possible values are accepted
+		wiringX.pinMode(0, PinMode.NOT_SET);
+		wiringX.pinMode(0, PinMode.INPUT);
+		wiringX.pinMode(0, PinMode.OUTPUT);
+		wiringX.pinMode(0, PinMode.INTERRUPT);
+	}
 
-    @Test
-    public void digitalWrite() {
-        wiringX.digitalWrite(0, DigitalValue.LOW);
-        wiringX.digitalWrite(0, DigitalValue.HIGH);
-    }
+	@Test
+	public void digitalWrite() {
+		wiringX.digitalWrite(0, DigitalValue.LOW);
+		wiringX.digitalWrite(0, DigitalValue.HIGH);
+	}
 
-    @Test
-    public void digitalRead() {
-        wiringX.digitalRead(0);
-    }
+	@Test
+	public void digitalRead() {
+		wiringX.digitalRead(0);
+	}
 
-    @Test
-    public void waitForInterrupt() {
-        // timeout = 1s
-        wiringX.waitForInterrupt(0, 1*1000);
-    }
+	@Test
+	public void waitForInterrupt() {
+		// timeout = 1s
+		wiringX.waitForInterrupt(0, 1*1000);
+	}
 
-    @Test
-    public void ISR() {
-        wiringX.ISR(0, ISRMode.UNKNOWN);
-        wiringX.ISR(0, ISRMode.RISING);
-        wiringX.ISR(0, ISRMode.FALLING);
-        wiringX.ISR(0, ISRMode.BOTH);
-        wiringX.ISR(0, ISRMode.NONE);
-    }
+	@Test
+	public void ISR() {
+		wiringX.ISR(0, ISRMode.UNKNOWN);
+		wiringX.ISR(0, ISRMode.RISING);
+		wiringX.ISR(0, ISRMode.FALLING);
+		wiringX.ISR(0, ISRMode.BOTH);
+		wiringX.ISR(0, ISRMode.NONE);
+	}
 }
