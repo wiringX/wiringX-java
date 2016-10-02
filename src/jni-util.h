@@ -31,3 +31,5 @@ void throw_new_exception_cached(JNIEnv *env, const char *classname, const char *
 #define RANGE_CHECK(var, min, max) (var < min || var > max)
 #define RANGE_CHECK2(var1, var2, min, max) (RANGE_CHECK(var1, min, max) || RANGE_CHECK(var2, min, max))
 #define RANGE_CHECK3(var1, var2, var3, min, max) (RANGE_CHECK2(var1, var2, min, max) || RANGE_CHECK(var3, min, max))
+#define RANGE_CHECK4(var1, var2, var3, var4, min, max) (RANGE_CHECK2(var1, var2, min, max) || RANGE_CHECK2(var3, var4, min, max))
+#define RANGE_CHECK5(var1, var2, var3, var4, var5, min, max) (RANGE_CHECK4(var1, var2, var3, var4, min, max) || RANGE_CHECK(var5, min, max))

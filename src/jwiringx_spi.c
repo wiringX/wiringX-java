@@ -37,6 +37,14 @@
 // the real wiringX
 #include <wiringX.h>
 
+/*
+ * Most platforms today have char as an 8 bit wide type.
+ * However there are weird platforms which cannot easily be supported.
+ */
+#if CHAR_BIT != 8
+#error size of char is not 8
+#endif
+
 jint Java_eu_jm0_wiringX_wiringX_SPIGetFd(JNIEnv *env, jclass class, jint channel) {
 	// check arguments for valid range
 	if(RANGE_CHECK(channel, INT_MIN, INT_MAX)) {
@@ -60,14 +68,6 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 		// return to java, return value will be ignored
 		return 0;
 	}
-
-	/*
-	 * Most platforms today have char as an 8 bit wide type.
-	 * However there are weird platforms which cannot easily be supported.
-	 */
-#	if CHAR_BIT != 8
-#		error size of char is not 8
-#	endif
 
 	// map data to a C array jbyte
 	jbyte *datac = (*env)->GetByteArrayElements(env, data, NULL);

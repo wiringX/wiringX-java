@@ -62,7 +62,7 @@ public class wiringX {
 	public static native void wiringXSerialFlush(int fd);
 	public static native void wiringXSerialClose(int fd);
 	public static native void wiringXSerialPutChar(int fd, byte data);
-	public static native void wiringXSerialPuts(int fd, byte[] data);
+	public static native void wiringXSerialPuts(int fd, String data);
 	public static native void wiringXSerialPrintf(int fd, String format, Object... args);
 	public static native int wiringXSerialDataAvail(int fd);
 	public static native int wiringXSerialGetChar(int fd);

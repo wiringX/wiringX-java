@@ -32,12 +32,14 @@ enum cache_entry {
 	CACHE_CLASS_java_lang_ClassCastException,
 	CACHE_CLASS_java_lang_EnumConstantNotPresentException,
 	CACHE_CLASS_java_lang_IllegalArgumentException,
+	CACHE_CLASS_java_lang_UnsupportedOperationException,
 
 	// internal classes
 	CACHE_CLASS_eu_jm0_wiringX_DigitalValue,
 	CACHE_CLASS_eu_jm0_wiringX_ISRMode,
 	CACHE_CLASS_eu_jm0_wiringX_LogConsumer,
 	CACHE_CLASS_eu_jm0_wiringX_PinMode,
+	CACHE_CLASS_eu_jm0_wiringX_SerialConfig,
 
 	// last entry to determine size
 	CACHE_MAX
