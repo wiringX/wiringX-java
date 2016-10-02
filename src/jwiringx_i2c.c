@@ -37,11 +37,6 @@
 // the real wiringX
 #include <wiringX.h>
 
-// helper macro for value range check
-#define RANGE_CHECK(var, min, max) (var < min || var > max)
-#define RANGE_CHECK2(var1, var2, min, max) (RANGE_CHECK(var1, min, max) || RANGE_CHECK(var2, min, max))
-#define RANGE_CHECK3(var1, var2, var3, min, max) (RANGE_CHECK2(var1, var2, min, max) || RANGE_CHECK(var3, min, max))
-
 jint Java_eu_jm0_wiringX_wiringX_I2CRead(JNIEnv * env, jclass class, jint fd) {
 	// check arguments for valid range
 	if(RANGE_CHECK(fd, INT_MIN, INT_MAX)) {

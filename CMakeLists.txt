@@ -33,6 +33,9 @@ set(CMAKE_INSTALL_JARDIR ${CMAKE_INSTALL_DATAROOTDIR}/java)
 enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
+# enable all compiler warnings
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+
 # add code
 add_subdirectory(src)
 add_subdirectory(test EXCLUDE_FROM_ALL)
