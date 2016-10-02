@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 find_package(Java REQUIRED)
-find_package(JUnit REQUIRED)
 find_package(JNI REQUIRED)
 find_package(wiringX REQUIRED)
 
@@ -33,11 +32,10 @@ set(jwiringX_SOURCES
 	eu/jm0/wiringX/PinMode.java
 	eu/jm0/wiringX/SerialConfig.java
 	eu/jm0/wiringX/wiringX.java
-	eu/jm0/wiringX/wiringXTest.java
 )
 
 include(UseJava)
-add_jar(jwiringX SOURCES ${jwiringX_SOURCES} VERSION ${PROJECT_VERSION} INCLUDE_JARS ${JUnit_PATH})
+add_jar(jwiringX SOURCES ${jwiringX_SOURCES} VERSION ${PROJECT_VERSION})
 
 install_jar(jwiringX ${CMAKE_INSTALL_JARDIR})
 

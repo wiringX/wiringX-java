@@ -24,8 +24,15 @@ cmake_minimum_required(VERSION 3.0)
 project(wiringx-java VERSION 0.1 LANGUAGES C Java)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
 
+# standard system paths
 include(GNUInstallDirs)
 # TODO: review jar location
 set(CMAKE_INSTALL_JARDIR ${CMAKE_INSTALL_DATAROOTDIR}/java)
 
+# enable make check
+enable_testing()
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+
+# add code
 add_subdirectory(src)
+add_subdirectory(test EXCLUDE_FROM_ALL)

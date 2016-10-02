@@ -69,6 +69,6 @@ public class wiringX {
 
     // load native library when class gets loaded
     static {
-        System.loadLibrary("wiringX_java");
+        System.loadLibrary("wiringx-java");
     }
 }

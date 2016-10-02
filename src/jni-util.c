@@ -75,4 +75,4 @@ void throw_new_exception(JNIEnv *env, const char *classname, const char *message
 // class cache variables
 jclass classcache_classcastexception = NULL;
 jclass classcache_enumconstantnotpresentexception = NULL;
-jclass classcache_llegalargumentexception = NULL;
+jclass classcache_illegalargumentexception = NULL;
