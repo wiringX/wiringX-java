@@ -44,7 +44,7 @@
 #include <stdarg.h>
 
 jint Java_eu_jm0_wiringX_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
-	// create UTF-8 encoded C-string from given platform string
+	// create UTF-8 encoded C-string from given jstring
 	const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
 	if(platformc == NULL) {
 		// allocating a C-String failed!
@@ -68,7 +68,7 @@ jint Java_eu_jm0_wiringX_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, 
 	}
 
 	// call original function
-	int r = wiringXSetup((char *)platformc, handler);
+	int r = wiringXSetup(platformc, handler);
 
 	// free resources
 	(*env)->ReleaseStringUTFChars(env, platform, platformc);
