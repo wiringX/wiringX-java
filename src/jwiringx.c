@@ -28,6 +28,12 @@
 // logconsumer implementation
 #include "jlogconsumer.h"
 
+// object cache
+#include "jni-cache.h"
+
+// utlity functions
+#include "jni-util.h"
+
 // the real wiringX
 #include <wiringX.h>
 
@@ -36,9 +42,6 @@
 
 // variadics
 #include <stdarg.h>
-
-// utlity functions
-#include "jni-util.h"
 
 jint Java_eu_jm0_wiringX_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
 	// create UTF-8 encoded C-string from given platform string
@@ -80,6 +83,9 @@ void Java_eu_jm0_wiringX_wiringX_GC(JNIEnv *env, jclass c) {
 
 	// free handle on logger
 	deregisterLogConsumer();
+
+	// clear object cache
+	cache_clear(env);
 }
 
 // Utility
@@ -104,7 +110,7 @@ void Java_eu_jm0_wiringX_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong 
 	// check arguments for valid value-range (unsigned int)
 	if(delay < 0 || delay > UINT_MAX) {
 		// throw exception
-		throw_new_exception(env, "java/lang/IllegalArgumentException", "Value out of Range", &classcache_illegalargumentexception);
+		throw_new_exception_cached(env, "java/lang/IllegalArgumentException", "Value out of Range", CACHE_CLASS_java_lang_IllegalArgumentException);
 
 		// return to java
 		return;

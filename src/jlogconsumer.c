@@ -25,7 +25,11 @@
 #include <jni.h>
 #include <stdlib.h>
 
+// declarations
 #include "jlogconsumer.h"
+
+// object cache
+#include "jni-cache.h"
 
 // utlity functions
 #include "jni-util.h"
@@ -41,7 +45,7 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
 	deregisterLogConsumer();
 
 	// look up expected class
-	static jclass class = NULL;
+	jclass class = cache_get(CACHE_CLASS_eu_jm0_wiringX_LogConsumer);
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/LogConsumer");
 		if(class == NULL) {
@@ -49,14 +53,14 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
 			// exception should have been thrown
 			return -1;
 		}
-		// refcount object for later use
-		class = (*env)->NewGlobalRef(env, class);
+		// store in cache for later use
+		cache_put(env, CACHE_CLASS_eu_jm0_wiringX_LogConsumer, class);
 	}
 
 	// check for expected interface type
 	if(!(*env)->IsInstanceOf(env, obj, class)) {
 		// throw exception
-		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of LogConsumer", &classcache_classcastexception);
+		throw_new_exception_cached(env, "java/lang/ClassCastException", "Not an instance of LogConsumer", CACHE_CLASS_java_lang_ClassCastException);
 
 		// return with failure
 		return -1;

@@ -22,7 +22,33 @@
  * SOFTWARE.
  */
 
-jobject create(JNIEnv *env, const char *classpath);
+// JNI
+#include <jni.h>
 
-void throw_new_exception(JNIEnv *env, const char *classname, const char *message);
-void throw_new_exception_cached(JNIEnv *env, const char *classname, const char *message, enum cache_entry entry);
+// declarations
+#include "jni-cache.h"
+
+// actual cache
+jobject cache[CACHE_MAX] = {NULL};
+
+jobject cache_get(enum cache_entry entry) {
+	return cache[entry];
+}
+
+void cache_put(JNIEnv *env, enum cache_entry entry, jobject obj) {
+	cache[entry] = (*env)->NewGlobalRef(env, obj);
+}
+
+void cache_delete(JNIEnv *env, enum cache_entry entry) {
+	jobject obj = cache[entry];
+	if(obj) {
+		(*env)->DeleteGlobalRef(env, obj);
+		cache[entry] = NULL;
+	}
+}
+
+void cache_clear(JNIEnv *env) {
+	for(size_t i = 0; i < CACHE_MAX; i++) {
+		cache_delete(env, i);
+	}
+}

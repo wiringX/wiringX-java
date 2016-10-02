@@ -24,6 +24,7 @@
 
 #include <jni.h>
 
+#include "jni-cache.h"
 #include "jni-util.h"
 
 jobject create(JNIEnv *env, const char *classpath) {
@@ -49,12 +50,25 @@ jobject create(JNIEnv *env, const char *classpath) {
 	return result;
 }
 
-void throw_new_exception(JNIEnv *env, const char *classname, const char *message, jclass *cachevar) {
-	// lookup class from cache variable, if any
-	jclass class = NULL;
-	if(cachevar && *cachevar) {
-		class = *cachevar;
-	} else {
+void throw_new_exception(JNIEnv *env, const char *classname, const char *message) {
+	// look-up class
+	jclass class = (*env)->FindClass(env, classname);
+
+	if(class == NULL) {
+		// classnotfound
+		// exception already thrown
+		return;
+	}
+
+	// throw it
+	(*env)->ThrowNew(env, class, message);
+}
+
+void throw_new_exception_cached(JNIEnv *env, const char *classname, const char *message, enum cache_entry entry) {
+	// get class from cache
+	jclass class = cache_get(entry);
+	if(class == NULL) {
+		// look-up class
 		class = (*env)->FindClass(env, classname);
 
 		if(class == NULL) {
@@ -63,19 +77,10 @@ void throw_new_exception(JNIEnv *env, const char *classname, const char *message
 			return;
 		}
 
-		// store class in cache variable, if any
-		if(cachevar) {
-			// refcount object for later use
-			class = (*env)->NewGlobalRef(env, class);
-			*cachevar = class;
-		}
+		// store in cache
+		cache_put(env, entry, class);
 	}
 
 	// throw it
 	(*env)->ThrowNew(env, class, message);
 }
-
-// class cache variables
-jclass classcache_classcastexception = NULL;
-jclass classcache_enumconstantnotpresentexception = NULL;
-jclass classcache_illegalargumentexception = NULL;

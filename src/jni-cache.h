@@ -22,7 +22,46 @@
  * SOFTWARE.
  */
 
-jobject create(JNIEnv *env, const char *classpath);
+/*
+ * This is an object cache for JNI objects
+ * It creates, stores and frees global references to objects
+ */
 
-void throw_new_exception(JNIEnv *env, const char *classname, const char *message);
-void throw_new_exception_cached(JNIEnv *env, const char *classname, const char *message, enum cache_entry entry);
+enum cache_entry {
+	// Exceptions
+	CACHE_CLASS_java_lang_ClassCastException,
+	CACHE_CLASS_java_lang_EnumConstantNotPresentException,
+	CACHE_CLASS_java_lang_IllegalArgumentException,
+
+	// internal classes
+	CACHE_CLASS_eu_jm0_wiringX_DigitalValue,
+	CACHE_CLASS_eu_jm0_wiringX_ISRMode,
+	CACHE_CLASS_eu_jm0_wiringX_LogConsumer,
+	CACHE_CLASS_eu_jm0_wiringX_PinMode,
+
+	// last entry to determine size
+	CACHE_MAX
+};
+
+/*
+ * read given entry from cache
+ * may return NULL
+ */
+jobject cache_get(enum cache_entry entry);
+
+/*
+ * stores a global reference to given object in given cache entry
+ * will overwrite anything in the cache
+ */
+void cache_put(JNIEnv *env, enum cache_entry entry, jobject obj);
+
+/*
+ * deletes global reference stored in given cache entry
+ * does nothing when cache entry is already empty
+ */
+void cache_delete(JNIEnv *env, enum cache_entry entry);
+
+/*
+ * deletes all entries in the cache
+ */
+void cache_clear(JNIEnv *env);

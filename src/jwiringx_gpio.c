@@ -25,6 +25,9 @@
 // generated JNI declerations
 #include "eu_jm0_wiringX_wiringX.h"
 
+// object cache
+#include "jni-cache.h"
+
 // utlity functions
 #include "jni-util.h"
 
@@ -37,21 +40,21 @@ jint Java_eu_jm0_wiringX_wiringX_ValidGPIO(JNIEnv *env, jclass c, jint pin) {
 
 jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
 	// look-up PinMode class
-	static jclass class = NULL;
+	jclass class = cache_get(CACHE_CLASS_eu_jm0_wiringX_PinMode);
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/PinMode");
 		if(class == NULL) {
 			// exception was thrown, return to java
 			return 0;
 		}
-		// refcount object for later use
-		class = (*env)->NewGlobalRef(env, class);
+		// store in cache for later use
+		cache_put(env, CACHE_CLASS_eu_jm0_wiringX_PinMode, class);
 	}
 
 	// check type
 	if(!(*env)->IsInstanceOf(env, mode, class)) {
 		// type mismatch, throw exception
-		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of PinMode", &classcache_classcastexception);
+		throw_new_exception_cached(env, "java/lang/ClassCastException", "Not an instance of PinMode", CACHE_CLASS_java_lang_ClassCastException);
 		return 0;
 	}
 
@@ -80,7 +83,7 @@ jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobjec
 		case 3: modec = PINMODE_INTERRUPT; break;
 		default:
 			// not good, throw an exception
-			throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
+			throw_new_exception_cached(env, "java/lang/EnumConstantNotPresentException", "", CACHE_CLASS_java_lang_EnumConstantNotPresentException);
 			return 0;
 	}
 
@@ -90,21 +93,21 @@ jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobjec
 
 jint Java_eu_jm0_wiringX_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
 	// look-up DigitalValue class
-	static jclass class = NULL;
+	jclass class = cache_get(CACHE_CLASS_eu_jm0_wiringX_DigitalValue);
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/DigitalValue");
 		if(class == NULL) {
 			// exception was thrown, return to java
 			return 0;
 		}
-		// refcount object for later use
-		class = (*env)->NewGlobalRef(env, class);
+		// store in cache for later use
+		cache_put(env, CACHE_CLASS_eu_jm0_wiringX_DigitalValue, class);
 	}
 
 	// check type
 	if(!(*env)->IsInstanceOf(env, value, class)) {
 		// type mismatch, throw exception
-		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of DigitalValue", &classcache_classcastexception);
+		throw_new_exception_cached(env, "java/lang/ClassCastException", "Not an instance of DigitalValue", CACHE_CLASS_java_lang_ClassCastException);
 		return 0;
 	}
 
@@ -131,7 +134,7 @@ jint Java_eu_jm0_wiringX_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, j
 		case 1: valuec = HIGH; break;
 		default:
 			// not good, throw an exception
-			throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
+			throw_new_exception_cached(env, "java/lang/EnumConstantNotPresentException", "", CACHE_CLASS_java_lang_EnumConstantNotPresentException);
 			return 0;
 	}
 
@@ -149,21 +152,21 @@ jint Java_eu_jm0_wiringX_wiringX_waitForInterrupt(JNIEnv *env, jclass c, jint pi
 
 jint Java_eu_jm0_wiringX_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mode) {
 	// look-up DigitalValue class
-	static jclass class = NULL;
+	jclass class = cache_get(CACHE_CLASS_eu_jm0_wiringX_ISRMode);
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/ISRMode");
 		if(class == NULL) {
 			// exception was thrown, return to java
 			return 0;
 		}
-		// refcount object for later use
-		class = (*env)->NewGlobalRef(env, class);
+		// store in cache for later use
+		cache_put(env, CACHE_CLASS_eu_jm0_wiringX_ISRMode, class);
 	}
 
 	// check type
 	if(!(*env)->IsInstanceOf(env, mode, class)) {
 		// type mismatch, throw exception
-		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of ISRMode", &classcache_classcastexception);
+		throw_new_exception_cached(env, "java/lang/ClassCastException", "Not an instance of ISRMode", CACHE_CLASS_java_lang_ClassCastException);
 		return 0;
 	}
 
@@ -193,7 +196,7 @@ jint Java_eu_jm0_wiringX_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mo
 		case 4: modec = ISR_MODE_NONE; break;
 		default:
 			// not good, throw an exception
-			throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
+			throw_new_exception_cached(env, "java/lang/EnumConstantNotPresentException", "", CACHE_CLASS_java_lang_EnumConstantNotPresentException);
 			return 0;
 	}
 

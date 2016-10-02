@@ -84,6 +84,8 @@ set(wiringx-java_SOURCES
 	gdbserver.c
 	jlogconsumer.c
 	jlogconsumer.h
+	jni-cache.c
+	jni-cache.h
 	jni-util.c
 	jni-util.h
 	jwiringx.c
