@@ -44,6 +44,8 @@ jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobjec
 			// exception was thrown, return to java
 			return 0;
 		}
+		// refcount object for later use
+		class = (*env)->NewGlobalRef(env, class);
 	}
 
 	// check type
@@ -95,6 +97,8 @@ jint Java_eu_jm0_wiringX_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, j
 			// exception was thrown, return to java
 			return 0;
 		}
+		// refcount object for later use
+		class = (*env)->NewGlobalRef(env, class);
 	}
 
 	// check type
@@ -152,6 +156,8 @@ jint Java_eu_jm0_wiringX_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mo
 			// exception was thrown, return to java
 			return 0;
 		}
+		// refcount object for later use
+		class = (*env)->NewGlobalRef(env, class);
 	}
 
 	// check type

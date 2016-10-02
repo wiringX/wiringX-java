@@ -49,9 +49,11 @@ int registerLogConsumer(JNIEnv *env, jobject obj) {
 			// exception should have been thrown
 			return -1;
 		}
+		// refcount object for later use
+		class = (*env)->NewGlobalRef(env, class);
 	}
 
-	// check actual object type
+	// check for expected interface type
 	if(!(*env)->IsInstanceOf(env, obj, class)) {
 		// throw exception
 		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of LogConsumer", &classcache_classcastexception);

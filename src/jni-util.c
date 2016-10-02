@@ -52,9 +52,9 @@ jobject create(JNIEnv *env, const char *classpath) {
 void throw_new_exception(JNIEnv *env, const char *classname, const char *message, jclass *cachevar) {
 	// lookup class from cache variable, if any
 	jclass class = NULL;
-	if(cachevar && *cachevar)
+	if(cachevar && *cachevar) {
 		class = *cachevar;
-	else {
+	} else {
 		class = (*env)->FindClass(env, classname);
 
 		if(class == NULL) {
@@ -62,14 +62,17 @@ void throw_new_exception(JNIEnv *env, const char *classname, const char *message
 			// exception already thrown
 			return;
 		}
+
+		// store class in cache variable, if any
+		if(cachevar) {
+			// refcount object for later use
+			class = (*env)->NewGlobalRef(env, class);
+			*cachevar = class;
+		}
 	}
 
 	// throw it
 	(*env)->ThrowNew(env, class, message);
-
-	// store class in cache variable, if any
-	if(cachevar)
-		*cachevar = class;
 }
 
 // class cache variables
