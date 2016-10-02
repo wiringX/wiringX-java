@@ -27,49 +27,49 @@
 #include "jni-util.h"
 
 jobject create(JNIEnv *env, const char *classpath) {
-    jobject result;
+	jobject result;
 
-    // look-up class
-    jclass class = (*env)->FindClass(env, classpath);
-    if(class == NULL)
-        return NULL;
+	// look-up class
+	jclass class = (*env)->FindClass(env, classpath);
+	if(class == NULL)
+		return NULL;
 
-    // look-up constructor
-    jmethodID cid = (*env)->GetMethodID(env, class, "<init>", "()V");
-    if(cid == NULL)
-        return NULL;
+	// look-up constructor
+	jmethodID cid = (*env)->GetMethodID(env, class, "<init>", "()V");
+	if(cid == NULL)
+		return NULL;
 
-    // create object
-    result = (*env)->NewObject(env, class, cid);
+	// create object
+	result = (*env)->NewObject(env, class, cid);
 
-    // free local resources
-    (*env)->DeleteLocalRef(env, class);
+	// free local resources
+	(*env)->DeleteLocalRef(env, class);
 
-    // done
-    return result;
+	// done
+	return result;
 }
 
 void throw_new_exception(JNIEnv *env, const char *classname, const char *message, jclass *cachevar) {
-    // lookup class from cache variable, if any
-    jclass class = NULL;
-    if(cachevar && *cachevar)
-        class = *cachevar;
-    else {
-        class = (*env)->FindClass(env, classname);
+	// lookup class from cache variable, if any
+	jclass class = NULL;
+	if(cachevar && *cachevar)
+		class = *cachevar;
+	else {
+		class = (*env)->FindClass(env, classname);
 
-        if(class == NULL) {
-            // classnotfound
-            // exception already thrown
-            return;
-        }
-    }
+		if(class == NULL) {
+			// classnotfound
+			// exception already thrown
+			return;
+		}
+	}
 
-    // throw it
-    (*env)->ThrowNew(env, class, message);
+	// throw it
+	(*env)->ThrowNew(env, class, message);
 
-    // store class in cache variable, if any
-    if(cachevar)
-        *cachevar = class;
+	// store class in cache variable, if any
+	if(cachevar)
+		*cachevar = class;
 }
 
 // class cache variables

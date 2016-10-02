@@ -31,107 +31,107 @@
 #include "jni-util.h"
 
 struct logger {
-    JNIEnv *env;
-    jobject obj;
-    jmethodID mid;
+	JNIEnv *env;
+	jobject obj;
+	jmethodID mid;
 } l = {0};
 
 int registerLogConsumer(JNIEnv *env, jobject obj) {
-    // if already registered, clean up first
-    deregisterLogConsumer();
+	// if already registered, clean up first
+	deregisterLogConsumer();
 
-    // look up expected class
-    static jclass class = NULL;
-    if(!class) {
-    	class = (*env)->FindClass(env, "eu/jm0/wiringX/LogConsumer");
-    	if(class == NULL) {
-    		// classnotfound
-    		// exception should have been thrown
-    		return -1;
-    	}
-    }
+	// look up expected class
+	static jclass class = NULL;
+	if(!class) {
+		class = (*env)->FindClass(env, "eu/jm0/wiringX/LogConsumer");
+		if(class == NULL) {
+			// classnotfound
+			// exception should have been thrown
+			return -1;
+		}
+	}
 
-    // check actual object type
-    if(!(*env)->IsInstanceOf(env, obj, class)) {
-        // throw exception
-    	throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of LogConsumer", &classcache_classcastexception);
+	// check actual object type
+	if(!(*env)->IsInstanceOf(env, obj, class)) {
+		// throw exception
+		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of LogConsumer", &classcache_classcastexception);
 
-        // return with failure
-        return -1;
-    }
+		// return with failure
+		return -1;
+	}
 
-    // lookup method (int, String)
-    jmethodID mid = (*env)->GetMethodID(env, class, "accept", "(ILjava/lang/String;)V");
-    if(mid == NULL) {
-        // methodnotound
-        // exception should have been thrown
-        return -1;
-    }
+	// lookup method (int, String)
+	jmethodID mid = (*env)->GetMethodID(env, class, "accept", "(ILjava/lang/String;)V");
+	if(mid == NULL) {
+		// methodnotound
+		// exception should have been thrown
+		return -1;
+	}
 
-    // store handles
-    l.env = env;
-    l.obj = (*env)->NewGlobalRef(env, obj);
-    l.mid = mid;
+	// store handles
+	l.env = env;
+	l.obj = (*env)->NewGlobalRef(env, obj);
+	l.mid = mid;
 
-    // all good
-    return 0;
+	// all good
+	return 0;
 }
 
 void deregisterLogConsumer() {
-    // is there anzthing to free?
-    if(l.env == NULL)
-        // apparently not
-        return;
+	// is there anzthing to free?
+	if(l.env == NULL)
+		// apparently not
+		return;
 
-    // free references
-    (*l.env)->DeleteGlobalRef(l.env, l.obj);
+	// free references
+	(*l.env)->DeleteGlobalRef(l.env, l.obj);
 
-    // set 0
-    l.env = NULL;
-    l.obj = NULL;
-    l.mid = NULL;
+	// set 0
+	l.env = NULL;
+	l.obj = NULL;
+	l.mid = NULL;
 }
 
 void logconsumerhandler(int prio, const char * format, ...) {
-    va_list args;
+	va_list args;
 
-    // calculate out string length
-    va_start (args, format);
-    int length = vsnprintf(NULL, 0, format, args);
-    va_end(args);
+	// calculate out string length
+	va_start (args, format);
+	int length = vsnprintf(NULL, 0, format, args);
+	va_end(args);
 
-    // allocate c-string
-    char *messagec = (char *)malloc(length+1);
-    // TODO: check if allocation worked
+	// allocate c-string
+	char *messagec = (char *)malloc(length+1);
+	// TODO: check if allocation worked
 
-    // build actual message string
-    va_start (args, format);
-    vsprintf(messagec, format, args);
-    va_end(args);
+	// build actual message string
+	va_start (args, format);
+	vsprintf(messagec, format, args);
+	va_end(args);
 
-    // free vararg list
-    va_end(args);
+	// free vararg list
+	va_end(args);
 
-    // create Java string
-    jstring message = (*l.env)->NewStringUTF(l.env, messagec);
-    if(message == NULL) {
-        // not good, allocating string failed
-        // return to C
-        // TODO: check what happens to exception
-        free(messagec);
-        return;
-    }
+	// create Java string
+	jstring message = (*l.env)->NewStringUTF(l.env, messagec);
+	if(message == NULL) {
+		// not good, allocating string failed
+		// return to C
+		// TODO: check what happens to exception
+		free(messagec);
+		return;
+	}
 
-    // free c-string
-    free(messagec);
+	// free c-string
+	free(messagec);
 
-    // call registered java function
-    (*l.env)->CallVoidMethod(l.env, l.obj, l.mid, (jint)prio, message);
-    if((*l.env)->ExceptionCheck(l.env)) {
-        // an exception occured
-        return;
-    }
+	// call registered java function
+	(*l.env)->CallVoidMethod(l.env, l.obj, l.mid, (jint)prio, message);
+	if((*l.env)->ExceptionCheck(l.env)) {
+		// an exception occured
+		return;
+	}
 
-    // done
-    return;
+	// done
+	return;
 }

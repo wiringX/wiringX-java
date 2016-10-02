@@ -41,80 +41,80 @@
 #include "jni-util.h"
 
 jint Java_eu_jm0_wiringX_wiringX_Setup(JNIEnv *env, jclass c, jstring platform, jobject logger) {
-    // create UTF-8 encoded C-string from given platform string
-    const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
-    if(platformc == NULL) {
-        // allocating a C-String failed!
-        // at this point an exception should have already been thrown.
-        // The return value is now irrelevant.
-        return 0;
-    }
+	// create UTF-8 encoded C-string from given platform string
+	const char *platformc = (*env)->GetStringUTFChars(env, platform, NULL);
+	if(platformc == NULL) {
+		// allocating a C-String failed!
+		// at this point an exception should have already been thrown.
+		// The return value is now irrelevant.
+		return 0;
+	}
 
-    // register logger, if any
-    void *handler = NULL;
-    if(logger != NULL) {
-        int r = registerLogConsumer(env, logger);
-        if(r != 0) {
-            // unexpected failure
-            // exceptions have already been thrown
-            return -1;
-        }
+	// register logger, if any
+	void *handler = NULL;
+	if(logger != NULL) {
+		int r = registerLogConsumer(env, logger);
+		if(r != 0) {
+			// unexpected failure
+			// exceptions have already been thrown
+			return -1;
+		}
 
-        // looks good
-        handler = &logconsumerhandler;
-    }
+		// looks good
+		handler = &logconsumerhandler;
+	}
 
-    // call original function
-    int r = wiringXSetup((char *)platformc, handler);
+	// call original function
+	int r = wiringXSetup((char *)platformc, handler);
 
-    // free resources
-    (*env)->ReleaseStringUTFChars(env, platform, platformc);
-    
-    // return result
-    return r;
+	// free resources
+	(*env)->ReleaseStringUTFChars(env, platform, platformc);
+	
+	// return result
+	return r;
 }
 
 void Java_eu_jm0_wiringX_wiringX_GC(JNIEnv *env, jclass c) {
-    // call original function
-    wiringXGC();
+	// call original function
+	wiringXGC();
 
-    // free handle on logger
-    deregisterLogConsumer();
+	// free handle on logger
+	deregisterLogConsumer();
 }
 
 // Utility
 
 jstring Java_eu_jm0_wiringX_wiringX_Platform(JNIEnv *env, jclass c) {
-    // call original function
-    const char *platformnamec = wiringXPlatform();
+	// call original function
+	const char *platformnamec = wiringXPlatform();
 
-    // create new string object
-    jstring platformname = (*env)->NewStringUTF(env, platformnamec);
-    if(platformname == NULL) {
-        // not good, allocating string failed
-        // exception already thrown, return to java
-        return NULL;
-    }
+	// create new string object
+	jstring platformname = (*env)->NewStringUTF(env, platformnamec);
+	if(platformname == NULL) {
+		// not good, allocating string failed
+		// exception already thrown, return to java
+		return NULL;
+	}
 
-    // all good, return string
-    return platformname;
+	// all good, return string
+	return platformname;
 }
 
 void Java_eu_jm0_wiringX_wiringX_delayMicroseconds(JNIEnv *env, jclass c, jlong delay) {
-    // check arguments for valid value-range (unsigned int)
-    if(delay < 0 || delay > UINT_MAX) {
-    	// throw exception
-    	throw_new_exception(env, "java/lang/IllegalArgumentException", "Value out of Range", &classcache_illegalargumentexception);
+	// check arguments for valid value-range (unsigned int)
+	if(delay < 0 || delay > UINT_MAX) {
+		// throw exception
+		throw_new_exception(env, "java/lang/IllegalArgumentException", "Value out of Range", &classcache_illegalargumentexception);
 
-    	// return to java
-        return;
-    }
+		// return to java
+		return;
+	}
 
-    // call original function
-    delayMicroseconds((int)delay);
+	// call original function
+	delayMicroseconds((int)delay);
 }
 
 jint Java_eu_jm0_wiringX_wiringX_SelectableFd(JNIEnv *env, jclass c, jint pin) {
-    return (jint)wiringXSelectableFd((int)pin);
+	return (jint)wiringXSelectableFd((int)pin);
 }
 

@@ -32,11 +32,11 @@
 #include <wiringX.h>
 
 jint Java_eu_jm0_wiringX_wiringX_ValidGPIO(JNIEnv *env, jclass c, jint pin) {
-    return (jint)wiringXValidGPIO((int)pin);
+	return (jint)wiringXValidGPIO((int)pin);
 }
 
 jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobject mode) {
-    // look-up PinMode class
+	// look-up PinMode class
 	static jclass class = NULL;
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/PinMode");
@@ -46,152 +46,152 @@ jint Java_eu_jm0_wiringX_wiringX_pinMode(JNIEnv *env, jclass c, jint pin, jobjec
 		}
 	}
 
-    // check type
-    if(!(*env)->IsInstanceOf(env, mode, class)) {
-        // type mismatch, throw exception
-        throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of PinMode", &classcache_classcastexception);
-        return 0;
-    }
+	// check type
+	if(!(*env)->IsInstanceOf(env, mode, class)) {
+		// type mismatch, throw exception
+		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of PinMode", &classcache_classcastexception);
+		return 0;
+	}
 
-    // get ordinal method
-    jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
-    if(mid == NULL) {
-        // methodnotfound
-        // exception already thrown
-        return 0;
-    }
+	// get ordinal method
+	jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
+	if(mid == NULL) {
+		// methodnotfound
+		// exception already thrown
+		return 0;
+	}
 
-    // get ordinal value
-    jint ordinal = (*env)->CallIntMethod(env, mode, mid);
-    if((*env)->ExceptionCheck(env)) {
-        // an exception occured
-        return 0;
-    }
+	// get ordinal value
+	jint ordinal = (*env)->CallIntMethod(env, mode, mid);
+	if((*env)->ExceptionCheck(env)) {
+		// an exception occured
+		return 0;
+	}
 
-    // convert to C enum
-    // Java Ordinals start from 0 and go to N in order of declaration
-    enum pinmode_t modec;
-    switch(ordinal) {
-        case 0: modec = PINMODE_NOT_SET; break;
-        case 1: modec = PINMODE_INPUT; break;
-        case 2: modec = PINMODE_OUTPUT; break;
-        case 3: modec = PINMODE_INTERRUPT; break;
-        default:
-            // not good, throw an exception
-            throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
-            return 0;
-    }
+	// convert to C enum
+	// Java Ordinals start from 0 and go to N in order of declaration
+	enum pinmode_t modec;
+	switch(ordinal) {
+		case 0: modec = PINMODE_NOT_SET; break;
+		case 1: modec = PINMODE_INPUT; break;
+		case 2: modec = PINMODE_OUTPUT; break;
+		case 3: modec = PINMODE_INTERRUPT; break;
+		default:
+			// not good, throw an exception
+			throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
+			return 0;
+	}
 
-    // call original function
-    return (jint)pinMode((int)pin, modec);
+	// call original function
+	return (jint)pinMode((int)pin, modec);
 }
 
 jint Java_eu_jm0_wiringX_wiringX_digitalWrite(JNIEnv *env, jclass c, jint pin, jobject value) {
-    // look-up DigitalValue class
+	// look-up DigitalValue class
 	static jclass class = NULL;
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/DigitalValue");
 		if(class == NULL) {
-        	// exception was thrown, return to java
-        	return 0;
-    	}
+			// exception was thrown, return to java
+			return 0;
+		}
 	}
 
-    // check type
-    if(!(*env)->IsInstanceOf(env, value, class)) {
-        // type mismatch, throw exception
-        throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of DigitalValue", &classcache_classcastexception);
-        return 0;
-    }
+	// check type
+	if(!(*env)->IsInstanceOf(env, value, class)) {
+		// type mismatch, throw exception
+		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of DigitalValue", &classcache_classcastexception);
+		return 0;
+	}
 
-    // get ordinal method
-    jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
-    if(mid == NULL) {
-        // methodnotfound
-        // exception already thrown
-        return 0;
-    }
+	// get ordinal method
+	jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
+	if(mid == NULL) {
+		// methodnotfound
+		// exception already thrown
+		return 0;
+	}
 
-    // get ordinal value
-    jint ordinal = (*env)->CallIntMethod(env, value, mid);
-    if((*env)->ExceptionCheck(env)) {
-        // an exception occured
-        return 0;
-    }
+	// get ordinal value
+	jint ordinal = (*env)->CallIntMethod(env, value, mid);
+	if((*env)->ExceptionCheck(env)) {
+		// an exception occured
+		return 0;
+	}
 
-    // convert to C enum
-    // Java Ordinals start from 0 and go to N in order of declaration
-    enum digital_value_t valuec;
-    switch(ordinal) {
-        case 0: valuec = LOW; break;
-        case 1: valuec = HIGH; break;
-        default:
-            // not good, throw an exception
-            throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
-            return 0;
-    }
+	// convert to C enum
+	// Java Ordinals start from 0 and go to N in order of declaration
+	enum digital_value_t valuec;
+	switch(ordinal) {
+		case 0: valuec = LOW; break;
+		case 1: valuec = HIGH; break;
+		default:
+			// not good, throw an exception
+			throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
+			return 0;
+	}
 
-    // call original function
-    return (jint)digitalWrite((int)pin, valuec);
+	// call original function
+	return (jint)digitalWrite((int)pin, valuec);
 }
 
 jint Java_eu_jm0_wiringX_wiringX_digitalRead(JNIEnv *env, jclass c, jint pin) {
-    return (jint)digitalRead((int)pin);
+	return (jint)digitalRead((int)pin);
 }
 
 jint Java_eu_jm0_wiringX_wiringX_waitForInterrupt(JNIEnv *env, jclass c, jint pin, jint timeout) {
-    return (jint)waitForInterrupt((int)pin, (int)timeout);
+	return (jint)waitForInterrupt((int)pin, (int)timeout);
 }
 
 jint Java_eu_jm0_wiringX_wiringX_ISR(JNIEnv *env, jclass c, jint pin, jobject mode) {
-    // look-up DigitalValue class
+	// look-up DigitalValue class
 	static jclass class = NULL;
 	if(!class) {
 		class = (*env)->FindClass(env, "eu/jm0/wiringX/ISRMode");
 		if(class == NULL) {
-        	// exception was thrown, return to java
-        	return 0;
-    	}
+			// exception was thrown, return to java
+			return 0;
+		}
 	}
 
-    // check type
-    if(!(*env)->IsInstanceOf(env, mode, class)) {
-        // type mismatch, throw exception
-        throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of ISRMode", &classcache_classcastexception);
-        return 0;
-    }
+	// check type
+	if(!(*env)->IsInstanceOf(env, mode, class)) {
+		// type mismatch, throw exception
+		throw_new_exception(env, "java/lang/ClassCastException", "Not an instance of ISRMode", &classcache_classcastexception);
+		return 0;
+	}
 
-    // get ordinal method
-    jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
-    if(mid == NULL) {
-        // methodnotfound
-        // exception already thrown
-        return 0;
-    }
+	// get ordinal method
+	jmethodID mid = (*env)->GetMethodID(env, class, "ordinal", "()I");
+	if(mid == NULL) {
+		// methodnotfound
+		// exception already thrown
+		return 0;
+	}
 
-    // get ordinal value
-    jint ordinal = (*env)->CallIntMethod(env, mode, mid);
-    if((*env)->ExceptionCheck(env)) {
-        // an exception occured
-        return 0;
-    }
+	// get ordinal value
+	jint ordinal = (*env)->CallIntMethod(env, mode, mid);
+	if((*env)->ExceptionCheck(env)) {
+		// an exception occured
+		return 0;
+	}
 
-    // convert to C enum
-    // Java Ordinals start from 0 and go to N in order of declaration
-    enum isr_mode_t modec;
-    switch(ordinal) {
-        case 0: modec = ISR_MODE_UNKNOWN; break;
-        case 1: modec = ISR_MODE_RISING; break;
-        case 2: modec = ISR_MODE_FALLING; break;
-        case 3: modec = ISR_MODE_BOTH; break;
-        case 4: modec = ISR_MODE_NONE; break;
-        default:
-            // not good, throw an exception
-            throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
-            return 0;
-    }
+	// convert to C enum
+	// Java Ordinals start from 0 and go to N in order of declaration
+	enum isr_mode_t modec;
+	switch(ordinal) {
+		case 0: modec = ISR_MODE_UNKNOWN; break;
+		case 1: modec = ISR_MODE_RISING; break;
+		case 2: modec = ISR_MODE_FALLING; break;
+		case 3: modec = ISR_MODE_BOTH; break;
+		case 4: modec = ISR_MODE_NONE; break;
+		default:
+			// not good, throw an exception
+			throw_new_exception(env, "java/lang/EnumConstantNotPresentException", "", &classcache_enumconstantnotpresentexception);
+			return 0;
+	}
 
-    // call original function
-    return (jint)wiringXISR((int)pin, modec);
+	// call original function
+	return (jint)wiringXISR((int)pin, modec);
 }
 

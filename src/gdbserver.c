@@ -29,31 +29,31 @@
 
 __attribute__((constructor))
 void gdbserver() {
-    int pid = fork();
+	int pid = fork();
 
-    if (pid < 0) {
-        // dont know what to do, maybe nothing is best
-        return;
-    } else if (pid > 0) {
-        // give user time to start gdb
-        printf("Waiting 10 seconds for gdb to attach.\n");
-        sleep(10);
-        return;
-    } else {
-        // forked
-        // run gdbserver
-        const char *format = "/usr/bin/gdbserver --attach %s %i";
-        int l = snprintf(NULL, 0, format, "127.0.0.1:11337", getppid());
-        char *command = (char *)malloc(l+1);
-        snprintf(command, l+1, format, "127.0.0.1:11337", getppid());
+	if (pid < 0) {
+		// dont know what to do, maybe nothing is best
+		return;
+	} else if (pid > 0) {
+		// give user time to start gdb
+		printf("Waiting 10 seconds for gdb to attach.\n");
+		sleep(10);
+		return;
+	} else {
+		// forked
+		// run gdbserver
+		const char *format = "/usr/bin/gdbserver --attach %s %i";
+		int l = snprintf(NULL, 0, format, "127.0.0.1:11337", getppid());
+		char *command = (char *)malloc(l+1);
+		snprintf(command, l+1, format, "127.0.0.1:11337", getppid());
 
-        //printf("%s\n", command);
-        int r = system(command);
-        free(command);
+		//printf("%s\n", command);
+		int r = system(command);
+		free(command);
 
-        if(r == -1)
-            fprintf(stderr, "\nFailed to exec GDB\n");
-    }
+		if(r == -1)
+			fprintf(stderr, "\nFailed to exec GDB\n");
+	}
 }
 
 #endif
