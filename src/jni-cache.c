@@ -48,7 +48,8 @@ void cache_delete(JNIEnv *env, enum cache_entry entry) {
 }
 
 void cache_clear(JNIEnv *env) {
-	for(size_t i = 0; i < CACHE_MAX; i++) {
+	size_t i;
+	for(i = 0; i < CACHE_MAX; i++) {
 		cache_delete(env, i);
 	}
 }
