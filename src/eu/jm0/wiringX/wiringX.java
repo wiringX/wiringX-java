@@ -53,9 +53,9 @@ public class wiringX {
 	public static native int I2CSetup(String path, int deviceID);
 
 	// SPI
-	public static native int SPIGetFd(int channel);
-	public static native int SPIDataRW(int channel, byte[] data);
-	public static native int SPISetup(int channel, int speed);
+	public static native int SPIGetFd(int handle);
+	public static native int SPIDataRW(int handle, byte[] data);
+	public static native int SPISetup(int device, int channel, int speed);
 
 	// Serial
 	public static native int wiringXSerialOpen(String device, SerialConfig configuration);

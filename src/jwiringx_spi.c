@@ -33,6 +33,7 @@
 
 // limits for converting numeric types
 #include <limits.h>
+#include <stdint.h>
 
 // malloc/free
 #include <stdlib.h>
@@ -48,9 +49,9 @@
 #error size of char is not 8
 #endif
 
-jint Java_eu_jm0_wiringX_wiringX_SPIGetFd(JNIEnv *env, jclass class, jint channel) {
+jint Java_eu_jm0_wiringX_wiringX_SPIGetFd(JNIEnv *env, jclass class, jint handle) {
 	// check arguments for valid range
-	if(RANGE_CHECK(channel, INT_MIN, INT_MAX)) {
+	if(RANGE_CHECK(handle, 0, UINT8_MAX)) {
 		// throw exception
 		throw_new_exception_cached(env, "java/lang/IllegalArgumentException", "Value out of Range", CACHE_CLASS_java_lang_IllegalArgumentException);
 
@@ -59,12 +60,12 @@ jint Java_eu_jm0_wiringX_wiringX_SPIGetFd(JNIEnv *env, jclass class, jint channe
 	}
 
 	// call original function
-	return wiringXSPIGetFd((int)channel);
+	return wiringXSPIGetFd((uint8_t)handle);
 }
 
-jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint channel, jbyteArray data) {
+jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint handle, jbyteArray data) {
 	// check arguments for valid range
-	if(RANGE_CHECK(channel, INT_MIN, INT_MAX)) {
+	if(RANGE_CHECK(handle, 0, UINT8_MAX)) {
 		// throw exception
 		throw_new_exception_cached(env, "java/lang/IllegalArgumentException", "Value out of Range", CACHE_CLASS_java_lang_IllegalArgumentException);
 
@@ -93,7 +94,7 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 
 	// call original function
 	// data is to be treated unsigned, Java code must perform the necessary transformations
-	int r = wiringXSPIDataRW((int)channel, (unsigned char *)datac, (int)len);
+	int r = wiringXSPIDataRW((uint8_t)handle, (unsigned char *)datac, (int)len);
 
 	// write back changes and release C array
 	(*env)->ReleaseByteArrayElements(env, data, datac, JNI_COMMIT);
@@ -102,9 +103,9 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 	return r;
 }
 
-jint Java_eu_jm0_wiringX_wiringX_SPISetup(JNIEnv *env, jclass class, jint channel, jint speed) {
+jint Java_eu_jm0_wiringX_wiringX_SPISetup(JNIEnv *env, jclass class, jint device, jint channel, jint speed) {
 	// check arguments for valid range
-	if(RANGE_CHECK2(channel, speed, INT_MIN, INT_MAX)) {
+	if(RANGE_CHECK2(device, channel, 0, UINT8_MAX) || RANGE_CHECK(speed, INT_MIN, INT_MAX)) {
 		// throw exception
 		throw_new_exception_cached(env, "java/lang/IllegalArgumentException", "Value out of Range", CACHE_CLASS_java_lang_IllegalArgumentException);
 
@@ -113,5 +114,5 @@ jint Java_eu_jm0_wiringX_wiringX_SPISetup(JNIEnv *env, jclass class, jint channe
 	}
 
 	// call original function
-	return wiringXSPISetup((int)channel, (int)speed);
+	return wiringXSPISetup((uint8_t)device, (uint8_t)channel, (int)speed);
 }
