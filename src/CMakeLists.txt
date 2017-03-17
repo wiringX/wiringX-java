@@ -32,6 +32,8 @@ set(jwiringX_SOURCES
 	eu/jm0/wiringX/PinMode.java
 	eu/jm0/wiringX/SerialConfig.java
 	eu/jm0/wiringX/wiringX.java
+	eu/jm0/wiringX/UByte.java
+	eu/jm0/wiringX/UByteArray.java
 )
 
 include(UseJava)
