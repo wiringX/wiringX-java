@@ -101,6 +101,7 @@ set_property(SOURCE eu_jm0_wiringX_wiringX.h PROPERTY GENERATED TRUE)
 add_dependencies(wiringx-java javah_jwiringX)
 
 target_include_directories(wiringx-java PRIVATE ${JNI_INCLUDE_DIRS} ${wiringX_INCLUDE_DIRS})
-target_link_libraries(wiringx-java ${JNI_LIBRARIES} ${wiringX_LIBRARIES})
+# do *not* link ${JNI_LIBRARIES} because they might change names and paths, and will already be loaded anyway
+target_link_libraries(wiringx-java ${wiringX_LIBRARIES})
 
 install(TARGETS wiringx-java LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
