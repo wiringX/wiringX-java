@@ -29,10 +29,7 @@
 
 # easiest case, find a junit.jar
 # TODO: review path hints
-find_file(JUnit_PATH junit.jar HINTS /usr/share/java)
-
-# TODO: look for versioned jars too, if junit.jar did not exist
-# e.g. junit4.jar
+find_file(JUnit_PATH NAMES junit4.jar junit.jar HINTS /usr/share/java)
 
 # call magic cmake function
 include(FindPackageHandleStandardArgs)
