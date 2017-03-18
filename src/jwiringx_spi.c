@@ -34,6 +34,9 @@
 // limits for converting numeric types
 #include <limits.h>
 
+// malloc/free
+#include <stdlib.h>
+
 // the real wiringX
 #include <wiringX.h>
 
@@ -69,10 +72,11 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 		return 0;
 	}
 
-	// map data to a C array jbyte
-	jbyte *datac = (*env)->GetByteArrayElements(env, data, NULL);
-	if(!datac) {
-		// an exception occured
+	// check that array exists
+	if(data == NULL) {
+		// throw exception
+		throw_new_exception_cached(env, "java/lang/NullPointerException", "data must not be null", CACHE_CLASS_java_lang_NullPointerException);
+
 		// return to java, return value will be ignored
 		return 0;
 	}
@@ -80,9 +84,32 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 	// retrieve array size
 	jint len = (*env)->GetArrayLength(env, data);
 
+	// create temporary C array to hold data
+	unsigned char *datac = malloc(len);
+	if(datac == NULL) {
+		throw_new_exception_cached(env, "java/lang/OutOfMemoryError", "Failed to allocate temporary C array", CACHE_CLASS_java_lang_OutOfMemoryError);
+
+		// return to java, return value will be ignored
+		return 0;
+	}
+
+	// copy data to temporary C array
+	(*env)->GetByteArrayRegion(env, data, 0, len, (signed char *)datac);
+
+	// transform signed to unsigned
+	jint i;
+	for(i = 0; i < len; i++) {
+		datac[i] -= INT8_MIN;
+	}
+
 	// call original function
-	// jbyte currently maps to signed char, which is compatible to unsigned char
-	return wiringXSPIDataRW((int)channel, (unsigned char *)datac, (int)len);
+	int r = wiringXSPIDataRW((int)channel, (unsigned char *)datac, (int)len);
+
+	// free temporary array
+	free(datac);
+
+	// deliver result
+	return r;
 }
 
 jint Java_eu_jm0_wiringX_wiringX_SPISetup(JNIEnv *env, jclass class, jint channel, jint speed) {
