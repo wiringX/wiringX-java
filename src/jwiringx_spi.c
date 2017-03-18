@@ -72,7 +72,7 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 		return 0;
 	}
 
-	// check that array exists
+	// check that data exists
 	if(data == NULL) {
 		// throw exception
 		throw_new_exception_cached(env, "java/lang/NullPointerException", "data must not be null", CACHE_CLASS_java_lang_NullPointerException);
@@ -81,32 +81,22 @@ jint Java_eu_jm0_wiringX_wiringX_SPIDataRW(JNIEnv *env, jclass class, jint chann
 		return 0;
 	}
 
-	// retrieve array size
+	// retrieve data size
 	jint len = (*env)->GetArrayLength(env, data);
 
-	// create temporary C array to hold data
-	unsigned char *datac = malloc(len);
+	// map data to C array
+	jbyte *datac = (*env)->GetByteArrayElements(env, data, NULL);
 	if(datac == NULL) {
-		throw_new_exception_cached(env, "java/lang/OutOfMemoryError", "Failed to allocate temporary C array", CACHE_CLASS_java_lang_OutOfMemoryError);
-
-		// return to java, return value will be ignored
+		// exception was thrown already, return to java
 		return 0;
 	}
 
-	// copy data to temporary C array
-	(*env)->GetByteArrayRegion(env, data, 0, len, (signed char *)datac);
-
-	// transform signed to unsigned
-	jint i;
-	for(i = 0; i < len; i++) {
-		datac[i] -= INT8_MIN;
-	}
-
 	// call original function
+	// data is to be treated unsigned, Java code must perform the necessary transformations
 	int r = wiringXSPIDataRW((int)channel, (unsigned char *)datac, (int)len);
 
-	// free temporary array
-	free(datac);
+	// write back changes and release C array
+	(*env)->ReleaseByteArrayElements(env, data, datac, JNI_COMMIT);
 
 	// deliver result
 	return r;

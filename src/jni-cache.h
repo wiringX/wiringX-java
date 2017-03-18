@@ -35,9 +35,6 @@ enum cache_entry {
 	CACHE_CLASS_java_lang_NullPointerException,
 	CACHE_CLASS_java_lang_UnsupportedOperationException,
 
-	// Errors
-	CACHE_CLASS_java_lang_OutOfMemoryError,
-
 	// internal classes
 	CACHE_CLASS_eu_jm0_wiringX_DigitalValue,
 	CACHE_CLASS_eu_jm0_wiringX_ISRMode,

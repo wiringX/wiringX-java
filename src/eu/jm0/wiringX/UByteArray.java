@@ -2,6 +2,15 @@ package eu.jm0.wiringX;
 
 import java.lang.IllegalArgumentException;
 
+/*
+ * In C:
+ * unsigned 0 maps to signed 0
+ * unsigned 127 maps to signed 127
+ * unsigned 128 maps to signed -128
+ * unsigned 255 maps to signed -1
+ * 
+ * --> implement overflow at 128
+ */
 public class UByteArray {
 	private byte[] b;
 	
@@ -14,12 +23,20 @@ public class UByteArray {
 			throw new IllegalArgumentException("Value out of Range");
 		}
 
-		b[index] = (byte) (value + Byte.MIN_VALUE);
+		/* make explicit use of integer overflow beyond Byte.MAX_VALUE */
+		if(value > 127) {
+			b[index] = 127;
+			b[index] += (value - 127);
+		} else {
+			b[index] = (byte)value;
+		}
 	}
 
 	public short Get(int index) {
 		short r = b[index];
-		r -= Byte.MIN_VALUE;
+		if(r < 0) {
+			r += 256;
+		}
 		return r;
 	}
 
